@@ -7,7 +7,6 @@
 (defn read-version
   ([] (read-version (:exoscale.deps-version/file default-opts)))
   ([version-file]
-   (prn "reading " version-file)
    (try (edn/read-string (slurp version-file))
         (catch java.io.FileNotFoundException _
           #:exoscale.deps-version{:major 0
