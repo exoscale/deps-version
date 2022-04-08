@@ -16,7 +16,7 @@ Add to your deps
 {:deps {org.clojure/clojure {:mvn/version "1.11.0"}}
  :paths ["src"]
  :aliases
- {:deps-modules {:deps {exoscale/deps-version {:git/sha "..."
+ {:deps-version {:deps {exoscale/deps-version {:git/sha "..."
                                                :git/url "git@github.com:exoscale/deps-version.git"}}
                  :ns-default exoscale.deps-version}}}
 ```
