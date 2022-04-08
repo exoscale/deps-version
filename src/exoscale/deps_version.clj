@@ -5,11 +5,13 @@
 (def default-opts
   #:exoscale.deps-version{:file "VERSION"
                           :default "0.1.0-SNAPSHOT"
+                          :op :inc
                           :rx "^(?i)(?:(\\d+)\\.)(?:(\\d+)\\.)(\\d+)(?:\\-(.+))?"})
 
 (s/def :exoscale.deps-version/file string?)
 (s/def :exoscale.deps-version/default string?)
-(s/def :exoscale.deps-version/key simple-keyword?)
+(s/def :exoscale.deps-version/key simple-ident?)
+(s/def :exoscale.deps-version/op #{:inc :dec})
 (s/def :exoscale.deps-version/suffix (s/nilable string?))
 (s/def :exoscale.deps-version/suffix-fn ifn?)
 
@@ -60,19 +62,26 @@
   [version-map k]
   (update version-map k inc))
 
+(defn dec-version
+  [version-map k]
+  (update version-map k dec))
+
 (defn update-suffix
   [version-map f]
   (update version-map :exoscale.deps-version/suffix f))
 
-(defn bump-version* [opts]
-  (let [{:exoscale.deps-version/keys [key suffix suffix-fn] :as opts}
+(defn update-version* [opts]
+  (let [{:exoscale.deps-version/keys [op key suffix suffix-fn] :as opts}
         (->> opts
              (into default-opts)
              (s/assert :exoscale.deps-version/opts))
         version-map (read-version opts)
-        version-map (if (keyword? key)
-                      (inc-version version-map
-                                   (keyword "exoscale.deps-version" (name key)))
+
+        version-map (if (ident? key)
+                      (let [target-key (keyword "exoscale.deps-version" (name key))]
+                        (case op
+                          :inc (inc-version version-map target-key)
+                          :dec (dec-version version-map target-key)))
                       version-map)
         new-version (cond-> version-map
                       ;; only update suffix is it's persent in opt map
@@ -86,12 +95,12 @@
     new-version))
 
 #_{:clj-kondo/ignore [:clojure-lsp/unused-public-var]}
-(defn bump-version
+(defn update-version
   [& {:as opts}]
-  (bump-version* (into {}
-                       (map (fn [[k v]]
-                              [(keyword "exoscale.deps-version" (name k)) v]))
-                       opts)))
+  (prn (update-version* (into {}
+                              (map (fn [[k v]]
+                                     [(keyword "exoscale.deps-version" (name k)) v]))
+                              opts))))
 
 ;; (bump-version :file "/home/mpenet/code/instancepool/VERSION"
 ;;               :key :patch
