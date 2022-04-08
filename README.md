@@ -28,10 +28,10 @@ clj -Ttools install exoscale/deps-version '{:git/sha "" :git/url "git@github.com
 Then you can just use it by running:
 
 ```shell
-clj -Tversion bump-version '{:key :patch}'
-clj -Tversion bump-version '{:key :major}'
-clj -Tversion bump-version '{:key :minor}'
-clj -Tversion bump-version '{:key :patch :suffix "SNAPSHOT"}'
-clj -Tversion bump-version '{:suffix nil}'
+clj -Tversion update-version '{:key :patch}'
+clj -Tversion update-version '{:key :major}'
+clj -Tversion update-version '{:key :minor :op :dec}'
+clj -Tversion update-version '{:key :patch :suffix "SNAPSHOT"}'
+clj -Tversion update-version '{:suffix nil}'
 ```
 or simply as a library
