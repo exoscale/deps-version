@@ -1,8 +1,8 @@
 # Simplistic version manipulation tool (tools.deps) for clojure
 
-* reads `version.edn` from file (if exists) as map
+* reads version String from file (if exists) into a map
 * updates part(s) of the version map 
-* writes file back and return version map
+* writes file back and returns new version
 
 Parsed data output map :
 
@@ -28,11 +28,10 @@ clj -Ttools install exoscale/deps-version '{:git/sha "" :git/url "git@github.com
 Then you can just use it by running:
 
 ```shell
-clj -Tversion bump '#:exoscale.deps-version{:key :patch}'
-clj -Tversion bump '#:exoscale.deps-version{:key :major}'
-clj -Tversion bump '#:exoscale.deps-version{:key :minor}'
-clj -Tversion bump '#:exoscale.deps-version{:key :patch :suffix "SNAPSHOT"}'
-clj -Tversion bump '#:exoscale.deps-version{:suffix nil}'
+clj -Tversion bump-version '{:key :patch}'
+clj -Tversion bump-version '{:key :major}'
+clj -Tversion bump-version '{:key :minor}'
+clj -Tversion bump-version '{:key :patch :suffix "SNAPSHOT"}'
+clj -Tversion bump-version '{:suffix nil}'
 ```
-
 or simply as a library
