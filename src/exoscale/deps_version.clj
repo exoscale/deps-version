@@ -2,6 +2,7 @@
   (:require [clojure.string :as str]
             [clojure.spec.alpha :as s]
             [clojure.tools.deps.alpha.util.dir :as td]
+            [clojure.string :as str]
             [clojure.java.io :as io]))
 
 (def default-opts
@@ -37,7 +38,7 @@
   ([file] (read-version-file* file nil))
   ([file default]
    (try
-     (slurp (td/canonicalize (io/file file)))
+     (str/trim (slurp (td/canonicalize (io/file file))))
      (catch java.io.FileNotFoundException _
        default))))
 
