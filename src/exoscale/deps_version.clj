@@ -1,6 +1,8 @@
 (ns exoscale.deps-version
   (:require [clojure.string :as str]
-            [clojure.spec.alpha :as s]))
+            [clojure.spec.alpha :as s]
+            [clojure.tools.deps.alpha.util.dir :as td]
+            [clojure.java.io :as io]))
 
 (def default-opts
   #:exoscale.deps-version{:file "VERSION"
@@ -36,7 +38,7 @@
   ([opts]
    (let [{:exoscale.deps-version/keys [default file]} (into default-opts opts)]
      (try
-       (slurp file)
+       (slurp (td/canonicalize (io/file file)))
        (catch java.io.FileNotFoundException _
          default)))))
 
@@ -56,7 +58,7 @@
 
 (defn write-version-file
   [version-map {:exoscale.deps-version/keys [file]}]
-  (spit file (version-string version-map)))
+  (spit (td/canonicalize (io/file file)) (version-string version-map)))
 
 (defn inc-version
   [version-map k]
