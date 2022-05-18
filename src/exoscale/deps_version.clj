@@ -33,11 +33,13 @@
       suffix
       (assoc :exoscale.deps-version/suffix suffix))))
 
-(defn read-version-file* [file default]
-  (try
-    (slurp (td/canonicalize (io/file file)))
-    (catch java.io.FileNotFoundException _
-      default)))
+(defn read-version-file*
+  ([file] (read-version-file* file nil))
+  ([file default]
+   (try
+     (slurp (td/canonicalize (io/file file)))
+     (catch java.io.FileNotFoundException _
+       default))))
 
 (defn read-version-file
   ([] (read-version-file default-opts))
